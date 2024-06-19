@@ -86,6 +86,7 @@ function setup() {
   const canvas = createCanvas(800, 600);
   canvas.parent('p5-sketch');  // Attach the canvas to the div with id 'p5-sketch'
   myCapture = createCapture(VIDEO);
+
   myCapture.size(320, 240);
   myCapture.hide();
   extra = createGraphics(windowWidth, 700);  // Instruction text
@@ -343,12 +344,12 @@ if (eyebrowRaised) {
 console.log("Fill Value:", fillValue);
     
   
-document.getElementById('blue').value = fillValue;
+document.getElementById('red').value = fillValue;
 
  fetch("http://172.20.10.4:3000/colour", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ colour: 'B', value: fillValue }),
+  body: JSON.stringify({ colour: 'R', value: fillValue }),
  })
  .then(response => {
   if (!response.ok) {
@@ -389,12 +390,21 @@ function drawDiagnosticInfo() { //draw diagnostic information life frames per se
 
  function myColor(){
   fetch("http://172.20.10.4:3000/colour")
-  .then(res => res.json())
-  .then(res => {
-  let objB = res.find(o => o.colour === 'colour: R, value: fillValue' );
-  let objG = res.find(o => o.colour === 'colour: G, value: fillValue');
-  })
-  
+    .then(res => res.json())
+    .then(res => {
+      let objR = res.find(o => o.colour === 'R');
+      let objG = res.find(o => o.colour === 'G');
+
+       if (objR !== undefined) {
+        document.getElementById('red').value = objR.value; // Assuming objB.value is the correct value
+        console.log('hello', objR);
+       }
+
+   if (objG !== undefined) {
+       document.getElementById('green').value = objG.value; // Assuming objG.value is the correct value
+       console.log(objG);
+       }
+
       var red = document.getElementById('red').value;
       var green = document.getElementById('green').value;
       var blue = document.getElementById('blue').value;
@@ -403,10 +413,13 @@ function drawDiagnosticInfo() { //draw diagnostic information life frames per se
       document.getElementById('box').value = color;
       document.getElementById('colorSquare').style.backgroundColor = color;
     }
+  )}
 
     document.getElementById('red').addEventListener('input', myColor);
     document.getElementById('green').addEventListener('input', myColor);
     document.getElementById('blue').addEventListener('input', myColor);
+
+    setInterval(myColor, 50);
 
     function getRandomColor() {
       var color = '#';
@@ -415,9 +428,12 @@ function drawDiagnosticInfo() { //draw diagnostic information life frames per se
       }
       return color;
     }
+
+
     
     window.onload = function() {
       document.body.style.backgroundColor = getRandomColor();
     };
 
 // Attach setRandomColor function to window.onload event
+
