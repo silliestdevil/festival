@@ -344,12 +344,12 @@ if (eyebrowRaised) {
 console.log("Fill Value:", fillValue);
     
   
-document.getElementById('red').value = fillValue;
+document.getElementById('blue').value = fillValue;
 
  fetch("http://172.20.10.4:3000/colour", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ colour: 'R', value: fillValue }),
+  body: JSON.stringify({ colour: 'B', value: fillValue }),
  })
  .then(response => {
   if (!response.ok) {
@@ -436,4 +436,3 @@ function drawDiagnosticInfo() { //draw diagnostic information life frames per se
     };
 
 // Attach setRandomColor function to window.onload event
-
